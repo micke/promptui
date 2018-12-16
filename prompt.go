@@ -24,6 +24,8 @@ type Prompt struct {
 	// and the user will be able to view or change it depending on the options.
 	Default string
 
+	DefaultAfterEdit string
+
 	// AllowEdit lets the user edit the default value. If false, any key press
 	// other than <Enter> automatically clears the default value.
 	AllowEdit bool
@@ -175,16 +177,17 @@ func (p *Prompt) Run() (string, error) {
 		case KeyBackspace:
 			if eraseDefault {
 				eraseDefault = false
-				input = ""
-			}
-			if len(input) > 0 {
-				r := []rune(input)
-				input = string(r[:len(r)-1])
+				input = p.DefaultAfterEdit
+			} else {
+				if len(input) > 0 {
+					r := []rune(input)
+					input = string(r[:len(r)-1])
+				}
 			}
 		default:
 			if eraseDefault {
 				eraseDefault = false
-				input = string(line)
+				input = p.DefaultAfterEdit + string(line)
 			}
 		}
 
