@@ -172,6 +172,9 @@ func (p *Prompt) Run() (string, error) {
 
 		switch key {
 		case 0: // empty
+		case 32: // space
+			r := []rune(input)
+			input = string(r[:len(r)-1]) + "-"
 		case KeyEnter:
 			return nil, 0, false
 		case KeyBackspace:
